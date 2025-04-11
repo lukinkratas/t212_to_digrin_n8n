@@ -1,0 +1,724 @@
+{
+  "name": "t212_to_digrin",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        0
+      ],
+      "id": "4fd15341-fbd2-48a6-aef2-1c2e066a39ce",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "content": "1. Setup in credentials as Header Auth with:\n    * name=Authorization\n    * value=T212_API_KEY\n\n2. Setup AWS credentials",
+        "width": 340,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        -200
+      ],
+      "id": "ea2b0312-c5b7-4a9c-af2b-b12a78b7a553",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://live.trading212.com/api/v0/history/exports",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"dataIncluded\": {\n    \"includeDividends\": true,\n    \"includeInterest\": true,\n    \"includeOrders\": true,\n    \"includeTransactions\": true\n  },\n  \"timeFrom\": \"{{ $json.fromDtFormatted }}\",\n  \"timeTo\": \"{{ $json.toDtFormatted }}\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        20
+      ],
+      "id": "4dfa1d39-2440-4d6d-9082-ff03d8ae4adf",
+      "name": "Create Report",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lCwKeXPCVd9pNbxl",
+          "name": "T212"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://live.trading212.com/api/v0/history/exports",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        20
+      ],
+      "id": "c97b11dd-6854-4ad6-abd6-33c425fee8b1",
+      "name": "Fetch Reports",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lCwKeXPCVd9pNbxl",
+          "name": "T212"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "includeTime": false,
+        "outputFieldName": "currentDt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        180,
+        0
+      ],
+      "id": "57a5f572-7af7-4e71-bcbc-3c071208b913",
+      "name": "Get Current Date"
+    },
+    {
+      "parameters": {
+        "operation": "subtractFromDate",
+        "magnitude": "={{ $json.currentDt }}",
+        "timeUnit": "months",
+        "duration": 1,
+        "outputFieldName": "previousMonthDt",
+        "options": {
+          "includeInputFields": false
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ],
+      "id": "7f1d3da9-2066-47fd-a263-fce804c18969",
+      "name": "Get Last Month Date"
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json.fromDt }}",
+        "format": "custom",
+        "customFormat": "yyyy-MM-dd'T00:00:00Z'",
+        "outputFieldName": "fromDtFormatted",
+        "options": {
+          "includeInputFields": false
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        840,
+        0
+      ],
+      "id": "466c3cab-8e5c-46fb-9210-3a094c610930",
+      "name": "Format From Date"
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json.toDate }}",
+        "format": "custom",
+        "customFormat": "yyyy-MM-dd'T00:00:00Z'",
+        "outputFieldName": "toDtFormatted",
+        "options": {
+          "includeInputFields": false
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        840,
+        180
+      ],
+      "id": "8e585646-f346-4df2-b0c6-ae387a5ad35d",
+      "name": "Format To Date"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1500,
+        20
+      ],
+      "id": "d6ecca01-4348-40e7-b424-ce06d82a6201",
+      "name": "Wait 10s - Optimized Wait Time",
+      "webhookId": "3b52d336-99e0-48a7-9d2f-05b121f2261d"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f273a6e8-6e60-4f0c-ab61-36af64752f20",
+              "leftValue": "={{ $json.reportId }}",
+              "rightValue": "={{ $('Create Report').item.json.body.reportId }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "969963f1-2f8c-4f9a-8ff2-cf5d03f5e50c",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Finished",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1940,
+        20
+      ],
+      "id": "cda58ccd-7a50-4ff6-9c30-fc7450581f05",
+      "name": "Filter Created Report Id"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst tickerMap = {\n  'VWCE': 'VWCE.DE',\n  'VUAA': 'VUAA.DE',\n  'SXRV': 'SXRV.DE',\n  'ZPRV': 'ZPRV.DE',\n  'ZPRX': 'ZPRX.DE',\n  'MC': 'MC.PA',\n  'ASML': 'ASML.AS',\n  'CSPX': 'CSPX.L',\n  'EISU': 'EISU.L',\n  'IITU': 'IITU.L',\n  'IUHC': 'IUHC.L',\n  'NDIA': 'NDIA.L'\n};\n\nfor (const item of $input.all()) {\n  if (tickerMap[item.json.Ticker]) {\n    item.json.Ticker = tickerMap[item.json.Ticker];\n  }\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2820,
+        20
+      ],
+      "id": "8f298995-1ec6-4a69-a524-552694699a63",
+      "name": "Map Ticker"
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "t212-to-digrin-test",
+        "fileName": "=t212/{{ $json.previousMonthDtFormatted }}.csv",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 2,
+      "position": [
+        2600,
+        -180
+      ],
+      "id": "2e8a9c00-95a2-4933-bb20-238d15b1e205",
+      "name": "AWS S3 upload T212 CSV",
+      "credentials": {
+        "aws": {
+          "id": "pYkksP0iq0Ih6p0A",
+          "name": "AWS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.downloadLink }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2160,
+        20
+      ],
+      "id": "575b7cb8-a446-4755-b769-fc046aa300f9",
+      "name": "Get Encoded T212 CSV"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        3040,
+        20
+      ],
+      "id": "8045fd66-998e-419e-9ba5-4370f131ee7a",
+      "name": "Encode Digrin DataFrame"
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "t212-to-digrin-test",
+        "fileName": "=digrin/{{ $json.previousMonthDtFormatted }}.csv",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 2,
+      "position": [
+        3460,
+        -380
+      ],
+      "id": "cb3beaa0-f01d-4390-ac64-6f30673b5987",
+      "name": "AWS S3 Upload Digrin CSV",
+      "credentials": {
+        "aws": {
+          "id": "pYkksP0iq0Ih6p0A",
+          "name": "AWS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "roundDate",
+        "date": "={{ $json.previousMonthDt }}",
+        "outputFieldName": "fromDt",
+        "options": {
+          "includeInputFields": false
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        620,
+        0
+      ],
+      "id": "3d96e3df-c424-40d4-beb2-390be3adfb27",
+      "name": "Get From Date"
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json.previousMonthDt }}",
+        "format": "custom",
+        "customFormat": "yyyy-MM",
+        "outputFieldName": "previousMonthDtFormatted",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        840,
+        -180
+      ],
+      "id": "6a57f5ab-9616-4cb9-9eb6-eba341d93aa7",
+      "name": "Format Last Month Date"
+    },
+    {
+      "parameters": {
+        "operation": "roundDate",
+        "date": "={{ $json.previousMonthDt }}",
+        "mode": "roundUp",
+        "outputFieldName": "toDate",
+        "options": {
+          "includeInputFields": false
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        620,
+        180
+      ],
+      "id": "4fc4d760-bbf6-4ff6-982e-4bb5384b23e9",
+      "name": "Get To Date"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1060,
+        20
+      ],
+      "id": "7442bedf-f692-4c8d-9227-fd06c7790661",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {
+          "rawData": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        2380,
+        20
+      ],
+      "id": "1aa0f052-681a-41f6-8d44-e3452d459f95",
+      "name": "Decode T212 to DataFrame"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        2380,
+        -180
+      ],
+      "id": "7b7e7288-233a-4e16-9d82-37043d24aafd",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        3240,
+        -380
+      ],
+      "id": "8269a430-d0ac-44c9-b3e1-70299fb6a6af",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "80249712-af1b-4018-948a-8f981b1bc84c",
+              "leftValue": "={{ [\"Market buy\", \"Market sell\"] }}",
+              "rightValue": "={{ $json.Action }}",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            },
+            {
+              "id": "a7e7a33b-d497-4d6c-9adf-81651e2af4b6",
+              "leftValue": "={{ [\"VNTRF\", \"BRK.A\"] }}",
+              "rightValue": "={{ $json.Ticker }}",
+              "operator": {
+                "type": "array",
+                "operation": "notContains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2600,
+        20
+      ],
+      "id": "26ead845-512e-4d40-af4d-3c927574f578",
+      "name": "Filter Only Buys and Sells, Filter Out Blacklisted Tickers"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get Current Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Report": {
+      "main": [
+        [
+          {
+            "node": "Wait 10s - Optimized Wait Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Reports": {
+      "main": [
+        [
+          {
+            "node": "Filter Created Report Id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Current Date": {
+      "main": [
+        [
+          {
+            "node": "Get Last Month Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Last Month Date": {
+      "main": [
+        [
+          {
+            "node": "Format Last Month Date",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get From Date",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get To Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format From Date": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format To Date": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Wait 10s - Optimized Wait Time": {
+      "main": [
+        [
+          {
+            "node": "Fetch Reports",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Created Report Id": {
+      "main": [
+        [
+          {
+            "node": "Get Encoded T212 CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Ticker": {
+      "main": [
+        [
+          {
+            "node": "Encode Digrin DataFrame",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS S3 upload T212 CSV": {
+      "main": [
+        []
+      ]
+    },
+    "Get Encoded T212 CSV": {
+      "main": [
+        [
+          {
+            "node": "Decode T212 to DataFrame",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Encode Digrin DataFrame": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get From Date": {
+      "main": [
+        [
+          {
+            "node": "Format From Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Last Month Date": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get To Date": {
+      "main": [
+        [
+          {
+            "node": "Format To Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS S3 Upload Digrin CSV": {
+      "main": [
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Create Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decode T212 to DataFrame": {
+      "main": [
+        [
+          {
+            "node": "Filter Only Buys and Sells, Filter Out Blacklisted Tickers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "AWS S3 upload T212 CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "AWS S3 Upload Digrin CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Only Buys and Sells, Filter Out Blacklisted Tickers": {
+      "main": [
+        [
+          {
+            "node": "Map Ticker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ae6fa193-b9b0-40d1-8f8b-4fe54706018e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "74f8a61d3acf0b63caa36e4eb4e01e742ee533544d2aa1638bc4ab1492d725c0"
+  },
+  "id": "Kvpd60a5dTTYFPX2",
+  "tags": []
+}
