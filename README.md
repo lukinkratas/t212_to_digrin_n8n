@@ -13,8 +13,8 @@ n8n tool for fetching T212 reports via API call and transforming them to be used
 
 ## Setup
 
-* Setup in credentials as Header Auth with:
+* T212 credentials as Header Auth with:
     * name=Authorization
     * value=T212_API_KEY
 
-* Setup AWS credentials
+* AWS credentials
