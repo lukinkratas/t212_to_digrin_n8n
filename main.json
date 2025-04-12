@@ -432,7 +432,7 @@
         20
       ],
       "id": "26ead845-512e-4d40-af4d-3c927574f578",
-      "name": "Filter Only Buys and Sells, Filter Out Blacklisted Tickers"
+      "name": "Filter Actions and Tickers"
     },
     {
       "parameters": {
