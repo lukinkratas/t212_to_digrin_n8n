@@ -61,28 +61,6 @@
     },
     {
       "parameters": {
-        "url": "https://live.trading212.com/api/v0/history/exports",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1720,
-        20
-      ],
-      "id": "c97b11dd-6854-4ad6-abd6-33c425fee8b1",
-      "name": "Fetch Reports",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "lCwKeXPCVd9pNbxl",
-          "name": "T212"
-        }
-      }
-    },
-    {
-      "parameters": {
         "includeTime": false,
         "outputFieldName": "currentDt",
         "options": {}
@@ -455,6 +433,28 @@
       ],
       "id": "26ead845-512e-4d40-af4d-3c927574f578",
       "name": "Filter Only Buys and Sells, Filter Out Blacklisted Tickers"
+    },
+    {
+      "parameters": {
+        "url": "https://live.trading212.com/api/v0/history/exports",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        20
+      ],
+      "id": "c97b11dd-6854-4ad6-abd6-33c425fee8b1",
+      "name": "List Reports",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lCwKeXPCVd9pNbxl",
+          "name": "T212"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -475,17 +475,6 @@
         [
           {
             "node": "Wait 10s - Optimized Wait Time",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Fetch Reports": {
-      "main": [
-        [
-          {
-            "node": "Filter Created Report Id",
             "type": "main",
             "index": 0
           }
@@ -550,7 +539,7 @@
       "main": [
         [
           {
-            "node": "Fetch Reports",
+            "node": "List Reports",
             "type": "main",
             "index": 0
           }
@@ -708,13 +697,24 @@
           }
         ]
       ]
+    },
+    "List Reports": {
+      "main": [
+        [
+          {
+            "node": "Filter Created Report Id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ae6fa193-b9b0-40d1-8f8b-4fe54706018e",
+  "versionId": "54cd29fa-ce8a-4f4f-ae81-0e76511ea560",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "74f8a61d3acf0b63caa36e4eb4e01e742ee533544d2aa1638bc4ab1492d725c0"
