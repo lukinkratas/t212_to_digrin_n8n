@@ -392,6 +392,28 @@
     },
     {
       "parameters": {
+        "url": "https://live.trading212.com/api/v0/history/exports",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        20
+      ],
+      "id": "c97b11dd-6854-4ad6-abd6-33c425fee8b1",
+      "name": "List Reports",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "lCwKeXPCVd9pNbxl",
+          "name": "T212"
+        }
+      }
+    },
+    {
+      "parameters": {
         "conditions": {
           "options": {
             "caseSensitive": true,
@@ -433,28 +455,6 @@
       ],
       "id": "26ead845-512e-4d40-af4d-3c927574f578",
       "name": "Filter Actions and Tickers"
-    },
-    {
-      "parameters": {
-        "url": "https://live.trading212.com/api/v0/history/exports",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1720,
-        20
-      ],
-      "id": "c97b11dd-6854-4ad6-abd6-33c425fee8b1",
-      "name": "List Reports",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "lCwKeXPCVd9pNbxl",
-          "name": "T212"
-        }
-      }
     }
   ],
   "pinData": {},
@@ -658,7 +658,7 @@
       "main": [
         [
           {
-            "node": "Filter Only Buys and Sells, Filter Out Blacklisted Tickers",
+            "node": "Filter Actions and Tickers",
             "type": "main",
             "index": 0
           }
@@ -687,22 +687,22 @@
         ]
       ]
     },
-    "Filter Only Buys and Sells, Filter Out Blacklisted Tickers": {
+    "List Reports": {
       "main": [
         [
           {
-            "node": "Map Ticker",
+            "node": "Filter Created Report Id",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "List Reports": {
+    "Filter Actions and Tickers": {
       "main": [
         [
           {
-            "node": "Filter Created Report Id",
+            "node": "Map Ticker",
             "type": "main",
             "index": 0
           }
@@ -714,7 +714,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "54cd29fa-ce8a-4f4f-ae81-0e76511ea560",
+  "versionId": "a4666f5e-3a4e-492f-9ad7-2516da9436fa",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "74f8a61d3acf0b63caa36e4eb4e01e742ee533544d2aa1638bc4ab1492d725c0"
