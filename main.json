@@ -1,30 +1,19 @@
 {
-  "name": "t212_to_digrin",
+  "name": "T212 to Digrin",
   "nodes": [
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -40,
-        0
-      ],
-      "id": "4fd15341-fbd2-48a6-aef2-1c2e066a39ce",
-      "name": "When clicking ‘Test workflow’"
-    },
     {
       "parameters": {
         "content": "1. Setup in credentials as Header Auth with:\n    * name=Authorization\n    * value=T212_API_KEY\n\n2. Setup AWS credentials",
-        "width": 340,
+        "width": 320,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -100,
-        -200
+        -3240,
+        280
       ],
-      "id": "ea2b0312-c5b7-4a9c-af2b-b12a78b7a553",
+      "id": "5fc2f234-1959-46a8-806e-a1af68747946",
       "name": "Sticky Note"
     },
     {
@@ -47,40 +36,40 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1280,
-        20
+        -1920,
+        660
       ],
-      "id": "4dfa1d39-2440-4d6d-9082-ff03d8ae4adf",
+      "id": "7c468682-19ff-4c0a-ba74-6b7db0e8dff2",
       "name": "Create Report",
       "credentials": {
         "httpHeaderAuth": {
           "id": "lCwKeXPCVd9pNbxl",
           "name": "T212"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
         "includeTime": false,
-        "outputFieldName": "currentDt",
         "options": {}
       },
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        180,
-        0
+        -3020,
+        470
       ],
-      "id": "57a5f572-7af7-4e71-bcbc-3c071208b913",
+      "id": "5ae8a375-5417-422a-a964-b761446dd84a",
       "name": "Get Current Date"
     },
     {
       "parameters": {
         "operation": "subtractFromDate",
-        "magnitude": "={{ $json.currentDt }}",
+        "magnitude": "={{ $json.currentDate }}",
         "timeUnit": "months",
         "duration": 1,
-        "outputFieldName": "previousMonthDt",
+        "outputFieldName": "previousMonthDate",
         "options": {
           "includeInputFields": false
         }
@@ -88,19 +77,19 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        400,
-        0
+        -2800,
+        470
       ],
-      "id": "7f1d3da9-2066-47fd-a263-fce804c18969",
+      "id": "4c0af8d3-9982-40a0-940a-9a79457c454d",
       "name": "Get Last Month Date"
     },
     {
       "parameters": {
         "operation": "formatDate",
-        "date": "={{ $json.fromDt }}",
+        "date": "={{ $json.fromDate }}",
         "format": "custom",
         "customFormat": "yyyy-MM-dd'T00:00:00Z'",
-        "outputFieldName": "fromDtFormatted",
+        "outputFieldName": "fromDateFormatted",
         "options": {
           "includeInputFields": false
         }
@@ -108,11 +97,12 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        840,
-        0
+        -2360,
+        460
       ],
-      "id": "466c3cab-8e5c-46fb-9210-3a094c610930",
-      "name": "Format From Date"
+      "id": "6577b4f8-807e-46b5-a005-fe62e1b43e78",
+      "name": "Format From Date",
+      "notes": "to make sure 00:00:00 time is used"
     },
     {
       "parameters": {
@@ -120,7 +110,7 @@
         "date": "={{ $json.toDate }}",
         "format": "custom",
         "customFormat": "yyyy-MM-dd'T00:00:00Z'",
-        "outputFieldName": "toDtFormatted",
+        "outputFieldName": "toDateFormatted",
         "options": {
           "includeInputFields": false
         }
@@ -128,11 +118,12 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        840,
-        180
+        -2360,
+        660
       ],
-      "id": "8e585646-f346-4df2-b0c6-ae387a5ad35d",
-      "name": "Format To Date"
+      "id": "8a45f922-7b8d-43f8-a640-9f952b581fdb",
+      "name": "Format To Date",
+      "notes": "to make sure 00:00:00 time is used"
     },
     {
       "parameters": {
@@ -141,10 +132,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1500,
-        20
+        -1700,
+        660
       ],
-      "id": "d6ecca01-4348-40e7-b424-ce06d82a6201",
+      "id": "463f13be-a6e0-40d6-85af-09504d25d5ed",
       "name": "Wait 10s - Optimized Wait Time",
       "webhookId": "3b52d336-99e0-48a7-9d2f-05b121f2261d"
     },
@@ -185,10 +176,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1940,
-        20
+        -1260,
+        660
       ],
-      "id": "cda58ccd-7a50-4ff6-9c30-fc7450581f05",
+      "id": "6da9e902-9105-4b57-b0a3-dfff75905197",
       "name": "Filter Created Report Id"
     },
     {
@@ -198,10 +189,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2820,
-        20
+        -380,
+        660
       ],
-      "id": "8f298995-1ec6-4a69-a524-552694699a63",
+      "id": "abc2359a-bd2c-465d-8673-de429ba20f17",
       "name": "Map Ticker"
     },
     {
@@ -214,10 +205,10 @@
       "type": "n8n-nodes-base.awsS3",
       "typeVersion": 2,
       "position": [
-        2600,
-        -180
+        -600,
+        440
       ],
-      "id": "2e8a9c00-95a2-4933-bb20-238d15b1e205",
+      "id": "620a4d91-f064-4e15-958e-3a6a7bb0736f",
       "name": "AWS S3 upload T212 CSV",
       "credentials": {
         "aws": {
@@ -234,10 +225,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2160,
-        20
+        -1040,
+        660
       ],
-      "id": "575b7cb8-a446-4755-b769-fc046aa300f9",
+      "id": "57a06c4a-e6e2-4173-8c71-7a63e4c16f03",
       "name": "Get Encoded T212 CSV"
     },
     {
@@ -247,10 +238,10 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        3040,
-        20
+        -160,
+        660
       ],
-      "id": "8045fd66-998e-419e-9ba5-4370f131ee7a",
+      "id": "4ecc895c-5c60-41bd-903a-267b5c8c722e",
       "name": "Encode Digrin DataFrame"
     },
     {
@@ -263,10 +254,10 @@
       "type": "n8n-nodes-base.awsS3",
       "typeVersion": 2,
       "position": [
-        3460,
-        -380
+        280,
+        260
       ],
-      "id": "cb3beaa0-f01d-4390-ac64-6f30673b5987",
+      "id": "b8660589-6a21-466f-9029-ff37798ee8ea",
       "name": "AWS S3 Upload Digrin CSV",
       "credentials": {
         "aws": {
@@ -278,8 +269,8 @@
     {
       "parameters": {
         "operation": "roundDate",
-        "date": "={{ $json.previousMonthDt }}",
-        "outputFieldName": "fromDt",
+        "date": "={{ $json.previousMonthDate }}",
+        "outputFieldName": "fromDate",
         "options": {
           "includeInputFields": false
         }
@@ -287,10 +278,10 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        620,
-        0
+        -2580,
+        460
       ],
-      "id": "3d96e3df-c424-40d4-beb2-390be3adfb27",
+      "id": "c0f28323-56b7-43ed-b20e-2b8140f0944b",
       "name": "Get From Date"
     },
     {
@@ -305,16 +296,16 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        840,
-        -180
+        -2360,
+        260
       ],
-      "id": "6a57f5ab-9616-4cb9-9eb6-eba341d93aa7",
+      "id": "05f6fc5a-8e27-466e-8fe9-5d4b91cb82b5",
       "name": "Format Last Month Date"
     },
     {
       "parameters": {
         "operation": "roundDate",
-        "date": "={{ $json.previousMonthDt }}",
+        "date": "={{ $json.previousMonthDate }}",
         "mode": "roundUp",
         "outputFieldName": "toDate",
         "options": {
@@ -324,10 +315,10 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        620,
-        180
+        -2580,
+        660
       ],
-      "id": "4fc4d760-bbf6-4ff6-982e-4bb5384b23e9",
+      "id": "af793663-9066-40ec-aa68-1cfceed5393d",
       "name": "Get To Date"
     },
     {
@@ -339,10 +330,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        1060,
-        20
+        -2140,
+        660
       ],
-      "id": "7442bedf-f692-4c8d-9227-fd06c7790661",
+      "id": "8ac57de3-f128-4da8-8a46-3d7f3500b76b",
       "name": "Merge"
     },
     {
@@ -354,10 +345,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        2380,
-        20
+        -820,
+        660
       ],
-      "id": "1aa0f052-681a-41f6-8d44-e3452d459f95",
+      "id": "75f78fcc-d43c-4197-ba66-8b31a9d6447d",
       "name": "Decode T212 to DataFrame"
     },
     {
@@ -369,10 +360,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        2380,
-        -180
+        -820,
+        440
       ],
-      "id": "7b7e7288-233a-4e16-9d82-37043d24aafd",
+      "id": "2d05a654-7a5b-42a6-95aa-f91240fb1c14",
       "name": "Merge1"
     },
     {
@@ -384,10 +375,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        3240,
-        -380
+        60,
+        260
       ],
-      "id": "8269a430-d0ac-44c9-b3e1-70299fb6a6af",
+      "id": "5653811e-98ff-4811-aef0-08f821e8e0a9",
       "name": "Merge2"
     },
     {
@@ -400,17 +391,18 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1720,
-        20
+        -1480,
+        660
       ],
-      "id": "c97b11dd-6854-4ad6-abd6-33c425fee8b1",
+      "id": "16e46930-a6fb-4508-98f7-f4c8b7cc73bd",
       "name": "List Reports",
       "credentials": {
         "httpHeaderAuth": {
           "id": "lCwKeXPCVd9pNbxl",
           "name": "T212"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -450,31 +442,102 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        2600,
-        20
+        -600,
+        660
       ],
-      "id": "26ead845-512e-4d40-af4d-3c927574f578",
+      "id": "66a852b0-e2bc-4f91-abcd-d7f8b837b311",
       "name": "Filter Actions and Tickers"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1700,
+        880
+      ],
+      "id": "3df82824-f285-4355-8236-df8eb6c2112a",
+      "name": "Wait 10s and Retry",
+      "webhookId": "3b52d336-99e0-48a7-9d2f-05b121f2261d"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1260,
+        880
+      ],
+      "id": "a96c75f8-b811-4290-990c-847e9aa986a8",
+      "name": "Wait 10s and Retry 2",
+      "webhookId": "3b52d336-99e0-48a7-9d2f-05b121f2261d"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtHour": 3,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -3240,
+        470
+      ],
+      "id": "f6a08a6f-9c2e-4485-83f8-3decf1c6669c",
+      "name": "Schedule Trigger"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Create Report": [
+      {
+        "json": {
+          "body": {
+            "reportId": 1775466
+          },
+          "headers": {
+            "date": "Thu, 24 Apr 2025 10:54:38 GMT",
+            "content-type": "application/json",
+            "content-length": "20",
+            "connection": "close",
+            "cf-cache-status": "DYNAMIC",
+            "set-cookie": [
+              "__cf_bm=nIfHONcKsznDCuEDZx_oJrbQ.JSqczNh_dDoSxGDpGs-1745492078-1.0.1.1-adau0pAYbIrHwdXaEtuARr5lWzRyGqz.HyIDz2eh8WWYGSM7iFP2Y7GS_9HGGOAQHsNkbC32LNMbcLSizY.MpCDA09u2vdLD7Ku3ncRLB.k; path=/; expires=Thu, 24-Apr-25 11:24:38 GMT; domain=.trading212.com; HttpOnly; Secure; SameSite=None",
+              "_cfuvid=zRmj6ST9TcRMRgA56m2tnwgX7wxr_dxvo9V0cFM0TFc-1745492078811-0.0.1.1-604800000; path=/; domain=.trading212.com; HttpOnly; Secure; SameSite=None"
+            ],
+            "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+            "server": "cloudflare",
+            "cf-ray": "935510541ae8b34b-PRG"
+          },
+          "statusCode": 200,
+          "statusMessage": "OK"
+        }
+      }
+    ]
+  },
   "connections": {
-    "When clicking ‘Test workflow’": {
-      "main": [
-        [
-          {
-            "node": "Get Current Date",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Create Report": {
       "main": [
         [
           {
             "node": "Wait 10s - Optimized Wait Time",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 10s and Retry",
             "type": "main",
             "index": 0
           }
@@ -568,11 +631,6 @@
         ]
       ]
     },
-    "AWS S3 upload T212 CSV": {
-      "main": [
-        []
-      ]
-    },
     "Get Encoded T212 CSV": {
       "main": [
         [
@@ -638,11 +696,6 @@
         ]
       ]
     },
-    "AWS S3 Upload Digrin CSV": {
-      "main": [
-        []
-      ]
-    },
     "Merge": {
       "main": [
         [
@@ -695,6 +748,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Wait 10s and Retry 2",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -708,17 +768,49 @@
           }
         ]
       ]
+    },
+    "Wait 10s and Retry": {
+      "main": [
+        [
+          {
+            "node": "Create Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 10s and Retry 2": {
+      "main": [
+        [
+          {
+            "node": "List Reports",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Current Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "a4666f5e-3a4e-492f-9ad7-2516da9436fa",
+  "versionId": "c6674b14-0f51-42a6-abf3-70179a324993",
   "meta": {
-    "templateCredsSetupCompleted": true,
     "instanceId": "74f8a61d3acf0b63caa36e4eb4e01e742ee533544d2aa1638bc4ab1492d725c0"
   },
-  "id": "Kvpd60a5dTTYFPX2",
+  "id": "UTbMIfF5jcsZS5Hb",
   "tags": []
 }
