@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -3240,
-        280
+        -880,
+        20
       ],
-      "id": "5fc2f234-1959-46a8-806e-a1af68747946",
+      "id": "2fb566b8-13f3-4566-8d54-c0ddb112abb4",
       "name": "Sticky Note"
     },
     {
@@ -24,7 +24,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"dataIncluded\": {\n    \"includeDividends\": true,\n    \"includeInterest\": true,\n    \"includeOrders\": true,\n    \"includeTransactions\": true\n  },\n  \"timeFrom\": \"{{ $json.fromDtFormatted }}\",\n  \"timeTo\": \"{{ $json.toDtFormatted }}\"\n}",
+        "jsonBody": "={\n  \"dataIncluded\": {\n    \"includeDividends\": true,\n    \"includeInterest\": true,\n    \"includeOrders\": true,\n    \"includeTransactions\": true\n  },\n  \"timeFrom\": \"{{ $json.fromDateFormatted }}\",\n  \"timeTo\": \"{{ $json.toDateFormatted }}\"\n}",
         "options": {
           "response": {
             "response": {
@@ -36,14 +36,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1920,
-        660
+        440,
+        400
       ],
-      "id": "7c468682-19ff-4c0a-ba74-6b7db0e8dff2",
+      "id": "12a7fec9-c42e-414c-86fb-af4463179782",
       "name": "Create Report",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "lCwKeXPCVd9pNbxl",
+          "id": "jRBuo8FJzdfBj9mC",
           "name": "T212"
         }
       },
@@ -57,10 +57,10 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -3020,
-        470
+        -660,
+        220
       ],
-      "id": "5ae8a375-5417-422a-a964-b761446dd84a",
+      "id": "e791cf79-216a-4100-a61e-834b6611fe36",
       "name": "Get Current Date"
     },
     {
@@ -77,10 +77,10 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -2800,
-        470
+        -440,
+        220
       ],
-      "id": "4c0af8d3-9982-40a0-940a-9a79457c454d",
+      "id": "018054d1-0d19-4fb3-a1e7-ad755512fd42",
       "name": "Get Last Month Date"
     },
     {
@@ -97,10 +97,10 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -2360,
-        460
+        0,
+        200
       ],
-      "id": "6577b4f8-807e-46b5-a005-fe62e1b43e78",
+      "id": "dbf2e7e6-eccc-4722-8e6b-5cbc0a787e51",
       "name": "Format From Date",
       "notes": "to make sure 00:00:00 time is used"
     },
@@ -118,10 +118,10 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -2360,
-        660
+        0,
+        400
       ],
-      "id": "8a45f922-7b8d-43f8-a640-9f952b581fdb",
+      "id": "deb97be8-53e0-4d42-a3d7-d4dfeb6ea757",
       "name": "Format To Date",
       "notes": "to make sure 00:00:00 time is used"
     },
@@ -132,10 +132,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1700,
-        660
+        660,
+        400
       ],
-      "id": "463f13be-a6e0-40d6-85af-09504d25d5ed",
+      "id": "d5929b9d-bd85-4355-b929-62ddf9798b5e",
       "name": "Wait 10s - Optimized Wait Time",
       "webhookId": "3b52d336-99e0-48a7-9d2f-05b121f2261d"
     },
@@ -176,10 +176,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -1260,
-        660
+        1100,
+        400
       ],
-      "id": "6da9e902-9105-4b57-b0a3-dfff75905197",
+      "id": "ae8573ba-9b57-4dc5-8e1a-d9cfae2ac582",
       "name": "Filter Created Report Id"
     },
     {
@@ -189,30 +189,30 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -380,
-        660
+        1980,
+        400
       ],
-      "id": "abc2359a-bd2c-465d-8673-de429ba20f17",
+      "id": "8e31216f-3346-4bbc-9e6e-7299dfacb534",
       "name": "Map Ticker"
     },
     {
       "parameters": {
         "operation": "upload",
         "bucketName": "t212-to-digrin-test",
-        "fileName": "=t212/{{ $json.previousMonthDtFormatted }}.csv",
+        "fileName": "=t212/{{ $json.previousMonthDateFormatted }}.csv",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.awsS3",
       "typeVersion": 2,
       "position": [
-        -600,
-        440
+        1760,
+        180
       ],
-      "id": "620a4d91-f064-4e15-958e-3a6a7bb0736f",
+      "id": "ea1f208c-05cf-4457-93bb-bf6cd49df3d8",
       "name": "AWS S3 upload T212 CSV",
       "credentials": {
         "aws": {
-          "id": "pYkksP0iq0Ih6p0A",
+          "id": "PvlozP4J275xOC85",
           "name": "AWS"
         }
       }
@@ -225,10 +225,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1040,
-        660
+        1320,
+        400
       ],
-      "id": "57a06c4a-e6e2-4173-8c71-7a63e4c16f03",
+      "id": "f321aa5a-43f3-4df5-81ac-47aac250a5ad",
       "name": "Get Encoded T212 CSV"
     },
     {
@@ -238,30 +238,30 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        -160,
-        660
+        2200,
+        400
       ],
-      "id": "4ecc895c-5c60-41bd-903a-267b5c8c722e",
+      "id": "28c49028-3d1b-49f4-98c5-58adbb75f2a8",
       "name": "Encode Digrin DataFrame"
     },
     {
       "parameters": {
         "operation": "upload",
         "bucketName": "t212-to-digrin-test",
-        "fileName": "=digrin/{{ $json.previousMonthDtFormatted }}.csv",
+        "fileName": "=digrin/{{ $json.previousMonthDateFormatted }}.csv",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.awsS3",
       "typeVersion": 2,
       "position": [
-        280,
-        260
+        2640,
+        0
       ],
-      "id": "b8660589-6a21-466f-9029-ff37798ee8ea",
+      "id": "047d6cc0-6dc0-4965-aad5-81ab528b07fa",
       "name": "AWS S3 Upload Digrin CSV",
       "credentials": {
         "aws": {
-          "id": "pYkksP0iq0Ih6p0A",
+          "id": "PvlozP4J275xOC85",
           "name": "AWS"
         }
       }
@@ -278,28 +278,28 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -2580,
-        460
+        -220,
+        200
       ],
-      "id": "c0f28323-56b7-43ed-b20e-2b8140f0944b",
+      "id": "c5760e94-5e9d-4294-847d-a27316dab4eb",
       "name": "Get From Date"
     },
     {
       "parameters": {
         "operation": "formatDate",
-        "date": "={{ $json.previousMonthDt }}",
+        "date": "={{ $json.previousMonthDate }}",
         "format": "custom",
         "customFormat": "yyyy-MM",
-        "outputFieldName": "previousMonthDtFormatted",
+        "outputFieldName": "previousMonthDateFormatted",
         "options": {}
       },
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -2360,
-        260
+        0,
+        0
       ],
-      "id": "05f6fc5a-8e27-466e-8fe9-5d4b91cb82b5",
+      "id": "15b9df78-7b6f-4cd1-9512-3437a990617f",
       "name": "Format Last Month Date"
     },
     {
@@ -315,10 +315,10 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -2580,
-        660
+        -220,
+        400
       ],
-      "id": "af793663-9066-40ec-aa68-1cfceed5393d",
+      "id": "21a882b9-b2be-4fc1-979f-6184062041d6",
       "name": "Get To Date"
     },
     {
@@ -330,10 +330,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        -2140,
-        660
+        220,
+        400
       ],
-      "id": "8ac57de3-f128-4da8-8a46-3d7f3500b76b",
+      "id": "abab5bd5-5c5e-49d2-bbf9-1435f82fa992",
       "name": "Merge"
     },
     {
@@ -345,10 +345,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -820,
-        660
+        1540,
+        400
       ],
-      "id": "75f78fcc-d43c-4197-ba66-8b31a9d6447d",
+      "id": "37492c24-2cc3-427f-9176-a3e6a6e184b8",
       "name": "Decode T212 to DataFrame"
     },
     {
@@ -360,10 +360,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        -820,
-        440
+        1540,
+        180
       ],
-      "id": "2d05a654-7a5b-42a6-95aa-f91240fb1c14",
+      "id": "69e28f15-d839-4e69-b913-e442a3ebbb74",
       "name": "Merge1"
     },
     {
@@ -375,10 +375,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        60,
-        260
+        2420,
+        0
       ],
-      "id": "5653811e-98ff-4811-aef0-08f821e8e0a9",
+      "id": "a8c83eba-90cc-4d21-ad54-72455765b300",
       "name": "Merge2"
     },
     {
@@ -391,14 +391,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1480,
-        660
+        880,
+        400
       ],
-      "id": "16e46930-a6fb-4508-98f7-f4c8b7cc73bd",
+      "id": "2bafd47f-80a4-4ad3-a5db-97e97bf03b21",
       "name": "List Reports",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "lCwKeXPCVd9pNbxl",
+          "id": "jRBuo8FJzdfBj9mC",
           "name": "T212"
         }
       },
@@ -442,10 +442,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -600,
-        660
+        1760,
+        400
       ],
-      "id": "66a852b0-e2bc-4f91-abcd-d7f8b837b311",
+      "id": "164f6102-72e8-4975-8f2e-38efc5855b42",
       "name": "Filter Actions and Tickers"
     },
     {
@@ -455,10 +455,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1700,
-        880
+        660,
+        620
       ],
-      "id": "3df82824-f285-4355-8236-df8eb6c2112a",
+      "id": "e7989992-cefd-4b1e-a4ea-95fc270e7310",
       "name": "Wait 10s and Retry",
       "webhookId": "3b52d336-99e0-48a7-9d2f-05b121f2261d"
     },
@@ -469,10 +469,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1260,
-        880
+        1100,
+        620
       ],
-      "id": "a96c75f8-b811-4290-990c-847e9aa986a8",
+      "id": "a5bbcfa0-5189-45cc-b5f5-4a85d35e4774",
       "name": "Wait 10s and Retry 2",
       "webhookId": "3b52d336-99e0-48a7-9d2f-05b121f2261d"
     },
@@ -491,40 +491,14 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -3240,
-        470
+        -880,
+        220
       ],
-      "id": "f6a08a6f-9c2e-4485-83f8-3decf1c6669c",
+      "id": "5807c34c-f2ca-4acd-94f7-9d30a9d6af57",
       "name": "Schedule Trigger"
     }
   ],
-  "pinData": {
-    "Create Report": [
-      {
-        "json": {
-          "body": {
-            "reportId": 1775466
-          },
-          "headers": {
-            "date": "Thu, 24 Apr 2025 10:54:38 GMT",
-            "content-type": "application/json",
-            "content-length": "20",
-            "connection": "close",
-            "cf-cache-status": "DYNAMIC",
-            "set-cookie": [
-              "__cf_bm=nIfHONcKsznDCuEDZx_oJrbQ.JSqczNh_dDoSxGDpGs-1745492078-1.0.1.1-adau0pAYbIrHwdXaEtuARr5lWzRyGqz.HyIDz2eh8WWYGSM7iFP2Y7GS_9HGGOAQHsNkbC32LNMbcLSizY.MpCDA09u2vdLD7Ku3ncRLB.k; path=/; expires=Thu, 24-Apr-25 11:24:38 GMT; domain=.trading212.com; HttpOnly; Secure; SameSite=None",
-              "_cfuvid=zRmj6ST9TcRMRgA56m2tnwgX7wxr_dxvo9V0cFM0TFc-1745492078811-0.0.1.1-604800000; path=/; domain=.trading212.com; HttpOnly; Secure; SameSite=None"
-            ],
-            "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
-            "server": "cloudflare",
-            "cf-ray": "935510541ae8b34b-PRG"
-          },
-          "statusCode": 200,
-          "statusMessage": "OK"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
     "Create Report": {
       "main": [
@@ -807,10 +781,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ab1b69da-1901-41c2-8724-df90117a239e",
+  "versionId": "9bbd009b-a4b5-45e1-9af5-be2b429ab172",
   "meta": {
-    "instanceId": "74f8a61d3acf0b63caa36e4eb4e01e742ee533544d2aa1638bc4ab1492d725c0"
+    "templateCredsSetupCompleted": true,
+    "instanceId": "88b3fb989b3cd3ae677f0fde26e11746a53565a30315214575e3aa79d72e0bd3"
   },
-  "id": "UTbMIfF5jcsZS5Hb",
+  "id": "ZfKRUxOT5om3i9Q7",
   "tags": []
 }
